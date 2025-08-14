@@ -13,6 +13,9 @@ export const Footer = () => {
           Terms & Conditions
         </Button>
       </div>
+      <span>
+        Made By Mohd Adnan Malik
+      </span>
     </div>
   );
 };
