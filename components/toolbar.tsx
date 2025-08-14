@@ -8,10 +8,9 @@ import TextareaAutoSize from "react-textarea-autosize";
 import { Doc } from "@/convex/_generated/dataModel";
 import { Button } from "@/components/ui/button";
 import { api } from "@/convex/_generated/api";
+import { useCoverImage } from "@/hooks/use-cover-image";
 
 import { IconPicker } from "./icon-picker";
-import { init } from "next/dist/compiled/webpack/webpack";
-import { removeIcon } from "@/convex/documents";
 
 interface ToolBarProps {
   initialData: Doc<"documents">;
@@ -28,6 +27,8 @@ export const ToolBar = ({
 
   const update = useMutation(api.documents.update);
   const removeIcon = useMutation(api.documents.removeIcon)
+
+  const coverImage = useCoverImage();
 
   const enableInput = () => {
     if (preview) return;
@@ -117,7 +118,7 @@ export const ToolBar = ({
         )}
         {!initialData.coverImage && !preview && (
           <Button
-            onClick={() => { }}
+            onClick={coverImage.onOpen}
             className="text-muted-foreground text-xs"
             variant="outline"
             size="sm"

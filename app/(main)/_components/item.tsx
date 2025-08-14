@@ -15,7 +15,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { MouseEvent } from "react";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
   DropdownMenu,
@@ -52,7 +52,7 @@ export const Item = ({
   onExpand,
 }: ItemProps) => {
   const { user } = useUser();
-  // const router = useRouter();
+  const router = useRouter();
   const create = useMutation(api.documents.create);
   const archive = useMutation(api.documents.archive);
 
@@ -61,7 +61,8 @@ export const Item = ({
   ) => {
     event.stopPropagation();
     if (!id) return;
-    const promise = archive({ id });
+    const promise = archive({ id })
+      .then(() => router.push("/documents"));
 
     toast.promise(promise, {
       loading: "Moving to Trash",
@@ -83,12 +84,12 @@ export const Item = ({
     event.stopPropagation();
     if (!id) return;
 
-    const promise = create({ title: "Untitiled", parentDocument: id })
+    const promise = create({ title: "Untitled", parentDocument: id })
       .then((documentId) => {
         if (!expanded) {
           onExpand?.();
         }
-        //router.push(`/documents/${documentId}`);
+        router.push(`/documents/${documentId}`);
       });
 
     toast.promise(promise, {
@@ -127,7 +128,7 @@ export const Item = ({
           {documentIcon}
         </div>
       ) : (
-        <Icon className="shrink-0 h-[18px] mr-2 text-muted-foreground" />
+        <Icon className="shrink-0 h-[18px] w-[18px] mr-2 text-muted-foreground" />
       )}
       <span className="truncate">
         {label}
